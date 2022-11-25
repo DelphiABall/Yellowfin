@@ -1,0 +1,488 @@
+object FrameReportList: TFrameReportList
+  Align = Client
+  Size.Width = 1100.000000000000000000
+  Size.Height = 568.000000000000000000
+  Size.PlatformDefault = False
+  object lvReports: TListView
+    ItemAppearanceClassName = 'TListItemAppearance'
+    ItemEditAppearanceClassName = 'TListItemDeleteAppearance'
+    HeaderAppearanceClassName = 'TListHeaderObjects'
+    FooterAppearanceClassName = 'TListHeaderObjects'
+    Align = Left
+    Position.Y = 40.000000000000000000
+    Size.Width = 265.000000000000000000
+    Size.Height = 528.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    OnItemClick = lvReportsItemClick
+    OnPullRefresh = lvReportsPullRefresh
+    SearchVisible = True
+    PullToRefresh = True
+  end
+  object Splitter1: TSplitter
+    Align = Left
+    Cursor = crHSplit
+    MinSize = 20.000000000000000000
+    Position.X = 265.000000000000000000
+    Position.Y = 40.000000000000000000
+    Size.Width = 8.000000000000000000
+    Size.Height = 528.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object ToolBar1: TToolBar
+    Size.Width = 1100.000000000000000000
+    Size.Height = 40.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    object btnRefresh: TButton
+      Align = Right
+      Position.X = 1048.000000000000000000
+      Size.Width = 52.000000000000000000
+      Size.Height = 40.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'refreshtoolbutton'
+      TabOrder = 0
+      Text = 'Refresh'
+      OnClick = btnRefreshClick
+    end
+    object cbListType: TComboBox
+      Items.Strings = (
+        'All User Reports'
+        'My Reports'
+        'Favourates'
+        'Drafts')
+      Position.X = 8.000000000000000000
+      Position.Y = 10.000000000000000000
+      Size.Width = 257.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      OnChange = cbListTypeChange
+    end
+  end
+  object loMain: TLayout
+    Align = Client
+    Size.Width = 827.000000000000000000
+    Size.Height = 528.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 10
+    object tcReportList: TTabControl
+      Align = Client
+      Size.Width = 827.000000000000000000
+      Size.Height = 495.000000000000000000
+      Size.PlatformDefault = False
+      TabIndex = 1
+      TabOrder = 3
+      TabPosition = None
+      Sizes = (
+        827s
+        495s)
+      object tabReport: TTabItem
+        CustomIcon = <
+          item
+          end>
+        IsSelected = False
+        Padding.Left = 1.000000000000000000
+        Padding.Top = 1.000000000000000000
+        Padding.Right = 1.000000000000000000
+        Padding.Bottom = 1.000000000000000000
+        Size.Width = 8.000000000000000000
+        Size.Height = 8.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = ''
+        TabOrder = 0
+        Text = 'Report'
+        ExplicitSize.cx = 56.000000000000000000
+        ExplicitSize.cy = 26.000000000000000000
+        object lblFilePath: TLabel
+          Align = Bottom
+          Position.Y = 478.000000000000000000
+          Size.Width = 827.000000000000000000
+          Size.Height = 17.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'File:'
+          TabOrder = 1
+        end
+        object lblReportTitle: TLabel
+          Align = MostTop
+          AutoSize = True
+          StyledSettings = [Family, Size, FontColor]
+          Size.Width = 827.000000000000000000
+          Size.Height = 16.000000000000000000
+          Size.PlatformDefault = False
+          TextSettings.Font.StyleExt = {00070000000000000004000000}
+          TextSettings.HorzAlign = Center
+          TabOrder = 2
+        end
+        object lblReportDescription: TLabel
+          Align = MostTop
+          AutoSize = True
+          Position.Y = 16.000000000000000000
+          Size.Width = 827.000000000000000000
+          Size.Height = 16.000000000000000000
+          Size.PlatformDefault = False
+          TextSettings.HorzAlign = Center
+          TabOrder = 0
+        end
+        object tcOutput: TTabControl
+          Align = Client
+          Size.Width = 827.000000000000000000
+          Size.Height = 446.000000000000000000
+          Size.PlatformDefault = False
+          TabIndex = 2
+          TabOrder = 3
+          TabPosition = Bottom
+          Sizes = (
+            827s
+            441s
+            827s
+            441s
+            827s
+            441s)
+          object tabBrowser: TTabItem
+            CustomIcon = <
+              item
+              end>
+            IsSelected = False
+            Size.Width = 0.000000000000000000
+            Size.Height = 5.000000000000000000
+            Size.PlatformDefault = False
+            StyleLookup = ''
+            TabOrder = 0
+            Text = 'Browser'
+            ExplicitSize.cx = 63.000000000000000000
+            ExplicitSize.cy = 26.000000000000000000
+          end
+          object tabSource: TTabItem
+            CustomIcon = <
+              item
+              end>
+            IsSelected = False
+            Size.Width = 0.000000000000000000
+            Size.Height = 5.000000000000000000
+            Size.PlatformDefault = False
+            StyleLookup = ''
+            TabOrder = 0
+            Text = 'Source'
+            ExplicitSize.cx = 57.000000000000000000
+            ExplicitSize.cy = 26.000000000000000000
+            object memoSource: TMemo
+              Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+              DataDetectorTypes = []
+              Align = Client
+              Size.Width = 827.000000000000000000
+              Size.Height = 441.000000000000000000
+              Size.PlatformDefault = False
+              TabOrder = 0
+              Viewport.Width = 827.000000000000000000
+              Viewport.Height = 441.000000000000000000
+            end
+          end
+          object tabSchema: TTabItem
+            CustomIcon = <
+              item
+              end>
+            IsSelected = True
+            Size.Width = 0.000000000000000000
+            Size.Height = 5.000000000000000000
+            Size.PlatformDefault = False
+            StyleLookup = ''
+            TabOrder = 0
+            Text = 'Schema'
+            ExplicitSize.cx = 62.000000000000000000
+            ExplicitSize.cy = 26.000000000000000000
+            object Grid1: TGrid
+              Align = Client
+              CanFocus = True
+              ClipChildren = True
+              Size.Width = 827.000000000000000000
+              Size.Height = 401.000000000000000000
+              Size.PlatformDefault = False
+              TabOrder = 0
+              Viewport.Width = 827.000000000000000000
+              Viewport.Height = 401.000000000000000000
+            end
+            object ToolBar3: TToolBar
+              Size.Width = 827.000000000000000000
+              Size.Height = 40.000000000000000000
+              Size.PlatformDefault = False
+              TabOrder = 1
+            end
+          end
+        end
+      end
+    end
+    object tbReport: TToolBar
+      Size.Width = 827.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      object btnRunReport: TButton
+        Action = actRunReport
+        Align = Right
+        Enabled = True
+        ImageIndex = -1
+        Margins.Left = 3.000000000000000000
+        Margins.Top = 3.000000000000000000
+        Margins.Right = 3.000000000000000000
+        Margins.Bottom = 3.000000000000000000
+        Position.X = 744.000000000000000000
+        Position.Y = 3.000000000000000000
+        Size.Width = 80.000000000000000000
+        Size.Height = 27.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 4
+      end
+      object rbHTML: TRadioButton
+        Align = Left
+        GroupName = 'ReportType'
+        IsChecked = True
+        Size.Width = 73.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Text = 'HTML'
+      end
+      object rbText: TRadioButton
+        Align = Left
+        GroupName = 'ReportType'
+        Position.X = 73.000000000000000000
+        Size.Width = 73.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        Text = 'Text'
+      end
+      object rbPDF: TRadioButton
+        Align = Left
+        GroupName = 'ReportType'
+        Position.X = 146.000000000000000000
+        Size.Width = 73.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 3
+        Text = 'PDF'
+      end
+      object rbXLS: TRadioButton
+        Align = Left
+        GroupName = 'ReportType'
+        Position.X = 219.000000000000000000
+        Size.Width = 73.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+        Text = 'XLS'
+      end
+      object imgFav: TImage
+        MultiResBitmap = <
+          item
+          end>
+        Align = Right
+        Margins.Left = 2.000000000000000000
+        Margins.Top = 2.000000000000000000
+        Margins.Right = 2.000000000000000000
+        Margins.Bottom = 2.000000000000000000
+        Position.X = 663.000000000000000000
+        Position.Y = 2.000000000000000000
+        Size.Width = 36.000000000000000000
+        Size.Height = 29.000000000000000000
+        Size.PlatformDefault = False
+        OnClick = imgFavClick
+      end
+      object imgFilter: TImage
+        MultiResBitmap = <
+          item
+            Width = 50
+            Height = 50
+            PNG = {
+              89504E470D0A1A0A0000000D49484452000000320000003208060000001E3F88
+              B1000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000
+              067A494441546843ED990B48DD551CC7EFBD3E53D79A424C0C6A458E419AB32C
+              34CA344DC511C369BE7383D22654AC0866508211ACADA007D1266DCBB71765D4
+              62456C646CD40872A5B645B3D7361AB1A216D37C5DB5CFEFFCCFBD78BD3EEEBD
+              DEEB83FCC2F1777EE777FEE77FBEE7F7FB9DFF3957D32A56E11F98B534959494
+              149ACDE6DD546F365A963D2E505E696969E9144511292A2A8A0F08083843F567
+              CAB7D2B6DC313E3EBE9939DFC2E26F6E6E6EFE4E11292D2DAD46BC43639C344A
+              DB72475959D91D9393937D131313D56D6D6DEF5A747BB0FC191B1B1B805434A5
+              B9A2A2E20669A3BE91B06B282828507DD093D0F753558BC08099B4BD2A7501F5
+              472912A20AD4ABE85FA95509E11A4A815645DF4BC9D0AA99FE07CACBCBEF1645
+              DE89DE881E2B3AFDD6A13753A265AED266B1584294943F538157EE4594DA6CB6
+              04D1619D46DB63818181B78A0E72D1AB20BA5614EC792323234F2B0B402F4654
+              199A0A81EDACDA0EADCAF842AAC4D04CA6D1D1D1A768DB26753D6625FDB788AE
+              DF59CE18E9A2D3EF4E442952E6E80417223C342492C1FE15C9434A6750A5D32E
+              BA2D24246454EBC3D4551F01FD8721E3D089E321295A15A25277E8FA59A5EB31
+              C7E9E3F46E56DD49B7DBA7C285089EE84264C5C6C67E2D7A7878780722A3A9A9
+              E9A2E80C568F48AFAFAF578331E81EDA72A42E40DFCD8BC52B76ECD44541DB6A
+              0C4D8D97C3E2A9D0D463A6050505C93B4CADADAD17182F332C2C4CED4C785EE6
+              94C59C648E4EB0277B05E27D1E2A457E226D4B05627FACA3A343C53F391200A9
+              EBA58E9C6C6868B82A75017396056965212AD8A01A151149ECA1A1A13E3ADF24
+              FA5282559F080E0E2EC71BAD4CF62B9AEE312CCADB072222229E1D1818F80002
+              9984F54522281EE2FF282202C8ACA77117D5E729E394D7E9F8B7D8161384DE04
+              F368B75AAD97D811B712761BB549C2F034E505AA5990DAC746B1A7B3B3F32F65
+              933F53C1165742E706AA3F92A4198D8D8DBF1996A545767676486464E447E209
+              D45D7CD1DF302C065C925D5C8AD806E30D303EC5AA6C302C4B87D4D4D44048B4
+              0B09E6F5F27412021722023A1EE5813C3CB21ED77E5E5C5C7CBB362D3A6A6B6B
+              2D3131318721B115752FEBFC926171C68C44047CF63F26477220B48E414E1271
+              71DAB49830F7F7F7BFC7FBCBA8EF67811D2786E970C991E980C07D0C748CEA28
+              A41E664516ED50C9AEF526424E0D0721F1047252DA67C2AC1EB183897F819023
+              829930EB22CC9295C1CF6001EB1042C24AAECA9167561282798908588D336C8B
+              0FC83185EFD571360075F6F11720514314BC48041CE32B5ECE77423E077362DE
+              D09A0A39859237272851A879E4D1A786C57780C47390788D6A171FC75CBE138E
+              73D95C70CB237670DE3ACF2ADD4FB98C878EF2D23C6DF20918AF1212FB58A853
+              78628BBB24041E79C40E390510B7C721B309523BC8A3266DF21A7276C203CD9C
+              80BF61EC87E4D8A14D6EC12B2202F2E446484868C9B65C491E1D52062F008947
+              20D10989F378E34142F64F6D721B015A7A8CDEDEDEC1C4C4442BC99F8667AAE3
+              E3E3AFF6F5F5C921CF23104E3984D311CA2F2C4C5A7B7BFB1FDAE411BC2622E8
+              E9E9194E4848686702C94CE4C9B8B8B841C87CA9CDF382AD3C15F121CFFE8E27
+              D239285E362C9E6341440478662C3939B993D048C2333BF1CC759039A1CDB382
+              704A2217E4EE738D6D3D9D70FAD5B078870513117477778FA5A4A41C616277B1
+              BADB2133019993DAEC82C2C2C2DB20FD19550B77A06CF2EBAC61F11E5E27FB4C
+              90A3765454945C4BE5C783B9EE32A184235C2CE9DCEEDC0EC5B9E0532202AEA7
+              6BB9E15D6113B8C26A9FD6CD0E40200CAFE5527D0B4F3C63B42E1C3E27226027
+              3AC7842F11F759BAC9016C7110E9C5FE38DF9F83BA79C1F0E8CBEE2E98E40093
+              8DD0AA1308A73522B15F530D3E825F888041C884EBBA1338412B22D8973F1156
+              7B90959FD3232B85C8C06C1EC1A688708D5EFE44F84A0F5266240241E5297635
+              F5239CAFE0B7D0B2D96C4264A65D517984AD7965841627594B7E7E7EA86E7200
+              8F2822C3C3C32B63D7D2D225E1758ED83CB934B903BF1221A15DF284DC8920EC
+              7C9A1F02BF10217C141156DF85886CBF9C767D1A5602BFE5884826EC125A9223
+              9495E11160CF9199426B0D445786478022C271C48508242220B3B288000711F9
+              219C936F1339B20932DFEB669FC1EFC92EFF9680C021089CE3065988ED706868
+              A8FCB3C6A7F0CB7D84FB7834427E4838CB5D3E563E8E106821D4EAAC56EB4FAA
+              938FE1172202BCF036221FAFC8DDBC8EDBE00FCAB08AFF054CA6FF00F3D1EB92
+              37EDD7670000000049454E44AE426082}
+          end>
+        Align = Right
+        Margins.Left = 2.000000000000000000
+        Margins.Top = 2.000000000000000000
+        Margins.Right = 2.000000000000000000
+        Margins.Bottom = 2.000000000000000000
+        Position.X = 703.000000000000000000
+        Position.Y = 2.000000000000000000
+        Size.Width = 36.000000000000000000
+        Size.Height = 29.000000000000000000
+        Size.PlatformDefault = False
+      end
+    end
+  end
+  object mvFilter: TMultiView
+    TargetControl = loMain
+    DrawerOptions.Placement = Right
+    DrawerOptions.Mode = PushingDetailView
+    MasterButton = imgFilter
+    Mode = Popover
+    NavigationPaneOptions.CollapsedWidth = 250.000000000000000000
+    SplitViewOptions.Placement = Right
+    Size.Width = 250.000000000000000000
+    Size.Height = 400.000000000000000000
+    Size.PlatformDefault = False
+    Visible = False
+    TabOrder = 13
+    object vsbFilter: TVertScrollBox
+      Align = Client
+      Margins.Left = 1.000000000000000000
+      Margins.Top = 1.000000000000000000
+      Margins.Right = 1.000000000000000000
+      Margins.Bottom = 1.000000000000000000
+      Size.Width = 248.000000000000000000
+      Size.Height = 398.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Viewport.Width = 250.000000000000000000
+      Viewport.Height = 413.000000000000000000
+    end
+  end
+  object bsDBReports: TBindSourceDB
+    DataSet = YF_ReportData.mtReports
+    ScopeMappings = <>
+    Left = 288
+    Top = 184
+  end
+  object BindingsList1: TBindingsList
+    Methods = <>
+    OutputConverters = <>
+    Left = 68
+    Top = 69
+    object LinkListControlToField1: TLinkListControlToField
+      Category = 'Quick Bindings'
+      DataSource = bsDBReports
+      FieldName = 'reportName'
+      Control = lvReports
+      FillExpressions = <
+        item
+          SourceMemberName = 'reportID'
+          ControlMemberName = 'Detail'
+        end>
+      FillHeaderExpressions = <>
+      FillHeaderFieldName = 'CategorySubCategory'
+      FillBreakGroups = <>
+    end
+    object LinkGridToDataSourceBindSourceDB2: TLinkGridToDataSource
+      Category = 'Quick Bindings'
+      DataSource = bsDBSchema
+      GridControl = Grid1
+      Columns = <
+        item
+          MemberName = 'FieldID'
+          Width = 90
+        end
+        item
+          MemberName = 'columnName'
+          Width = 110
+        end
+        item
+          MemberName = 'dataType'
+          Width = 90
+        end
+        item
+          MemberName = 'displayName'
+          Width = 110
+        end
+        item
+          MemberName = 'defaultValue1'
+          Width = 90
+        end
+        item
+          MemberName = 'defaultValue2'
+          Width = 90
+        end
+        item
+          MemberName = 'filterID'
+          Width = 90
+        end
+        item
+          MemberName = 'AllowPrompt'
+          Width = 90
+        end
+        item
+          MemberName = 'CachedValues'
+          Width = 90
+        end
+        item
+          MemberName = 'FilterDisplayType'
+          Width = 100
+        end>
+    end
+    object LinkControlToField1: TLinkControlToField
+      Category = 'Quick Bindings'
+      DataSource = bsDBReports
+      FieldName = 'FavIcon'
+      Control = imgFav
+      Track = False
+    end
+  end
+  object bsDBSchema: TBindSourceDB
+    DataSet = YF_ReportData.mtReportSchema
+    ScopeMappings = <>
+    Left = 344
+    Top = 200
+  end
+  object ActionListReportList: TActionList
+    Left = 321
+    Top = 290
+    object actRunReport: TAction
+      Text = 'Run Report'
+      OnExecute = actRunReportExecute
+      OnUpdate = actRunReportUpdate
+    end
+  end
+end
