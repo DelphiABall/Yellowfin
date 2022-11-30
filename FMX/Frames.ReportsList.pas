@@ -83,6 +83,7 @@ uses
   YF.JAX.ReportService.Helper,
   YF.SOAP.Defaults,
   YF.SOAP.Constants,
+  YF.SOAP.UserMethods,
   System.NetEncoding,
   System.IOUtils, Frames.Filter.ComboBox, Frames.Filter.Date,
   Frames.Filter.SpinBox, Frames.Filter.Text;

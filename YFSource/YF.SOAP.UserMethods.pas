@@ -10,6 +10,7 @@ type
     class function ValidatePassword(aUserID, aPassword : string): Boolean;
 
     class function TestDefaultCredentials : Boolean;
+    class function FetchSessionID(aUserID, aPassword: string): string; static;
   end;
 
 implementation
@@ -18,6 +19,28 @@ implementation
 uses System.SysUtils, YF.SOAP.Defaults, YF.JAX.AdministrationService,
   YF.JAX.AdministrationService.Helper, YF.SOAP.Constants, YF.JAX.ReportService,
   YF.JAX.ReportService.Helper;
+
+class function TYFUserMethods.FetchSessionID(aUserID,
+  aPassword: string): string;
+begin
+  // Fech a sessionID for iframe implementation
+  var
+  WS := GetLegacyAdministrationService(False,
+    YFDefaults.GetServiceURL(TYFDefaults.TYFService.Admin));
+  var
+  req := AdministrationServiceRequest.CreateWithDefaults(YFDefaults,
+    YRC_LOGINUSER);
+  req.Person.userId := aUserID;
+  req.Person.password := aPassword;
+
+  var
+  SoapResult := WS.remoteAdministrationCall(req);
+  try
+    Result := SoapResult.loginSessionId;
+  finally
+    SoapResult.Free;
+  end;
+end;
 
 class function TYFUserMethods.TestDefaultCredentials: Boolean;
 begin

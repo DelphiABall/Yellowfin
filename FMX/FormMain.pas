@@ -85,31 +85,25 @@ begin
 end;
 
 procedure TForm1.tcMainChange(Sender: TObject);
+  procedure ParentToTab(aFrame : TFrame; aParent : TTabItem);
+  begin
+    aFrame.Parent := aParent;
+    aFrame.Align := TAlignLayout.Client;
+    aFrame.Visible := True;
+  end;
 begin
   // Sections loaded on demand - this keeps startup lean and reduces API calls.
-  if tcMain.ActiveTab = tabReports then begin
-    if not tabReports.Contains(TFrameReportList) then begin
-      var F := TFrameReportList.Create(tcMain.ActiveTab);
-      F.Parent := tabReports;
-      F.Align := TAlignLayout.Client;
-      F.Visible := True;
-    end;
-  end else
-  if tcMain.ActiveTab = tabSettings then begin
-    if not tabSettings.Contains(TFrameSettings) then begin
-      var F := TFrameSettings.Create(tcMain.ActiveTab);
-      F.Parent := tabSettings;
-      F.Align := TAlignLayout.Client;
-      F.Visible := True;
-    end;
-  end else
-  if tcMain.ActiveTab = tabUsers then begin
-    if not tabUsers.Contains(TFrameUsers) then begin
-      var F := TFrameUsers.Create(tcMain.ActiveTab);
-      F.Parent := tabUsers;
-      F.Align := TAlignLayout.Client;
-      F.Visible := True;
-    end;
+  if (tcMain.ActiveTab = tabReports) then begin
+    if not tabReports.Contains(TFrameReportList) then
+      ParentToTab(TFrameReportList.Create(tcMain.ActiveTab),tabReports);
+  end
+  else if tcMain.ActiveTab = tabSettings then begin
+    if not tabSettings.Contains(TFrameSettings) then
+      ParentToTab(TFrameSettings.Create(tcMain.ActiveTab),tabSettings);
+  end
+  else if tcMain.ActiveTab = tabUsers then begin
+    if not tabUsers.Contains(TFrameUsers) then
+      ParentToTab(TFrameUsers.Create(tcMain.ActiveTab),tabUsers);
   end;
 end;
 

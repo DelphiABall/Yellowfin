@@ -24,7 +24,7 @@ const
   YRC_VALIDATEUSER = 'VALIDATEUSER';
   YRC_VALIDATEPASSWORD = 'VALIDATEPASSWORD';
   YRC_CHANGEPASSWORD = 'CHANGEPASSWORD';
-
+  YRC_LOGINUSER = 'LOGINUSER';
 
   // Report Request - https://wiki.yellowfinbi.com/display/yfcurrent/Report+Format+Services
   YRR_CSV  = 'CSV';
