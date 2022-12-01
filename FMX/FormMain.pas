@@ -10,7 +10,7 @@ uses
   FMX.ListView.Adapters.Base, FMX.ListView, FMX.Layouts, FMX.Objects,
   FMX.MultiView, FMX.TabControl, FMX.Effects, Frames.Settings,
   Frames.ReportsList, FireDAC.UI.Intf, FireDAC.FMXUI.Wait, FireDAC.Stan.Intf,
-  FireDAC.Comp.UI;
+  FireDAC.Comp.UI, Frames.YellowfinBrowser;
 
 type
   TForm1 = class(TForm)
@@ -29,11 +29,14 @@ type
     btnUsers: TButton;
     tabUsers: TTabItem;
     FDGUIxWaitCursor1: TFDGUIxWaitCursor;
+    tabSingleSignon: TTabItem;
+    btnSingleSignon: TButton;
     procedure btnSettingsClick(Sender: TObject);
     procedure btnReportsClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure tcMainChange(Sender: TObject);
     procedure btnUsersClick(Sender: TObject);
+    procedure btnSingleSignonClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -64,6 +67,11 @@ begin
   tcMain.ActiveTab := tabSettings;
 end;
 
+procedure TForm1.btnSingleSignonClick(Sender: TObject);
+begin
+  tcMain.ActiveTab := tabSingleSignon;
+end;
+
 procedure TForm1.btnUsersClick(Sender: TObject);
 begin
   tcMain.ActiveTab := tabUsers;
@@ -71,7 +79,6 @@ end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-
   var Favs : IFavourateImages := TYF_FMXResources.Create(Self);
   YF_ReportData := TYF_ReportData.Create(Self, Favs);
 
@@ -81,7 +88,6 @@ begin
 
   if TOSVersion.Platform in [TOSVersion.TPlatform.pfAndroid, TOSVersion.TPlatform.pfiOS] then
     MultiView1.Mode := TMultiViewMode.Drawer;
-
 end;
 
 procedure TForm1.tcMainChange(Sender: TObject);
@@ -104,6 +110,10 @@ begin
   else if tcMain.ActiveTab = tabUsers then begin
     if not tabUsers.Contains(TFrameUsers) then
       ParentToTab(TFrameUsers.Create(tcMain.ActiveTab),tabUsers);
+  end
+  else if tcMain.ActiveTab = tabSingleSignon then begin
+    if not tabSingleSignon.Contains(TFrameYellowfinBrowser) then
+      ParentToTab(TFrameYellowfinBrowser.Create(tcMain.ActiveTab),tabSingleSignon);
   end;
 end;
 

@@ -20,16 +20,12 @@ uses System.SysUtils, YF.SOAP.Defaults, YF.JAX.AdministrationService,
   YF.JAX.AdministrationService.Helper, YF.SOAP.Constants, YF.JAX.ReportService,
   YF.JAX.ReportService.Helper;
 
-class function TYFUserMethods.FetchSessionID(aUserID,
-  aPassword: string): string;
+class function TYFUserMethods.FetchSessionID(aUserID, aPassword: string): string;
 begin
   // Fech a sessionID for iframe implementation
-  var
-  WS := GetLegacyAdministrationService(False,
-    YFDefaults.GetServiceURL(TYFDefaults.TYFService.Admin));
-  var
-  req := AdministrationServiceRequest.CreateWithDefaults(YFDefaults,
-    YRC_LOGINUSER);
+  var WS := GetLegacyAdministrationService(False, YFDefaults.GetServiceURL(TYFDefaults.TYFService.Admin));
+  var req := AdministrationServiceRequest.CreateWithDefaults(YFDefaults, YRC_LOGINUSER);
+
   req.Person.userId := aUserID;
   req.Person.password := aPassword;
 

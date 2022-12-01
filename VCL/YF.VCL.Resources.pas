@@ -36,14 +36,14 @@ procedure TYF_VCLResources.GetFavourateImage(const IsFavourate: Boolean;
   MSImage: TMemoryStream);
 begin
   var Image : TWICImage;
-  try
-    if IsFavourate then
-      Image := FavImages.GetSourceImage(FavImages.GetIndexByName('Star Filled'), 40, 40)
-    else
-      Image := FavImages.GetSourceImage(FavImages.GetIndexByName('Star'), 40, 40);
-  finally
+
+  if IsFavourate then
+    Image := FavImages.GetSourceImage(FavImages.GetIndexByName('Star Filled'), 40, 40)
+  else
+    Image := FavImages.GetSourceImage(FavImages.GetIndexByName('Star'), 40, 40);
+
+  if Assigned(Image) then
     Image.SaveToStream(MSImage);
-  end;
 end;
 
 end.

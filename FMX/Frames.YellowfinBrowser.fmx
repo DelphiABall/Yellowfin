@@ -1,0 +1,47 @@
+object FrameYellowfinBrowser: TFrameYellowfinBrowser
+  Size.Width = 628.000000000000000000
+  Size.Height = 362.000000000000000000
+  Size.PlatformDefault = False
+  object WebBrowser: TWebBrowser
+    Align = Client
+    Size.Width = 628.000000000000000000
+    Size.Height = 322.000000000000000000
+    Size.PlatformDefault = False
+    WindowsEngine = EdgeIfAvailable
+  end
+  object ToolBar1: TToolBar
+    Size.Width = 628.000000000000000000
+    Size.Height = 40.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object Label1: TLabel
+      Align = Contents
+      Size.Width = 628.000000000000000000
+      Size.Height = 40.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.HorzAlign = Center
+      Text = 'Yellowfin Web Embedded'
+      TabOrder = 0
+      object btnRefresh: TButton
+        Action = actHome
+        Align = Right
+        Enabled = True
+        ImageIndex = -1
+        Position.X = 560.000000000000000000
+        Size.Width = 68.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'refreshtoolbutton'
+        TabOrder = 4
+      end
+    end
+  end
+  object ActionList1: TActionList
+    Left = 136
+    Top = 8
+    object actHome: TAction
+      Text = 'Home'
+      OnExecute = actHomeExecute
+    end
+  end
+end

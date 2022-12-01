@@ -22,7 +22,8 @@ uses
   Frames.Filter.SpinBox in 'Frames.Filter.SpinBox.pas' {FrameFilterNumber: TFrame},
   Frames.Filter.Text in 'Frames.Filter.Text.pas' {FrameFilterText: TFrame},
   YF.FMX.Resources in '..\YFSource\YF.FMX.Resources.pas' {YF_FMXResources: TDataModule},
-  YF.Resources in '..\YFSource\YF.Resources.pas';
+  YF.Resources in '..\YFSource\YF.Resources.pas',
+  Frames.YellowfinBrowser in 'Frames.YellowfinBrowser.pas' {FrameYellowfinBrowser: TFrame};
 
 {$R *.res}
 
