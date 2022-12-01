@@ -63,8 +63,12 @@ __history/
 __recovery/
 *.~*
 
+# WebView2 files
+EBWebView/
+
 # Castalia statistics file (since XE7 Castalia is distributed with Delphi)
 *.stat
 
 # Boss dependency manager vendor folder https://github.com/HashLoad/boss
 modules/
+
