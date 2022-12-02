@@ -202,22 +202,27 @@ begin
   end
   else
   begin
-   {$REGION 'Interactive URL'}
-   // Get the base URL for the session
-   // Add in the paramaters if selected for the report
-   InitiateBrowser;
-   var aURL := TYFUserMethods.GenerateYellowfinSingleSignOnURL('VIEWREPORT')+Format('&REPORTID=%d',[YF_ReportData.mtReportsreportID.AsInteger]);
+    {$REGION 'Interactive URL'}
+    // Get the base URL for the session
+    // Add in the paramaters if selected for the report
+    InitiateBrowser;
+    if not tcReportList.Visible then
+      begin
+        tcReportList.Visible := True;
+        tcOutput.ActiveTab := tabBrowser;
+      end;
+    var aURL := TYFUserMethods.GenerateYellowfinSingleSignOnURL('VIEWREPORT')+Format('&reportid=%d',[YF_ReportData.mtReportsreportID.AsInteger]);
 
-   // Add in filters (optional)
+    // Add in filters (optional)
     for var CurrFilter in FActiveFilter do begin
       if CurrFilter.FilterEnabled then begin
         var FilterValues := CurrFilter.FilterString;
-        aURL := aURL+ Format('&FILTER%d=%s',[CurrFilter.FilterID,FilterValues]);
+        // what happens if the filter string has a space
+        aURL := aURL + Format('&filter%d=%s',[CurrFilter.FilterID,FilterValues]);
       end;
     end;
-
-   FWebBrowser1.Navigate(aURL);
-   {$ENDREGION}
+    FWebBrowser1.Navigate(aURL);
+    {$ENDREGION}
   end;
 end;
 

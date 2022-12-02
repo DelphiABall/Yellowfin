@@ -77,7 +77,7 @@ end;
 
 function TYFDefaults.SigleSignOnBaseURL(aSessionId: string): string;
 begin
- Result := Format(BaseURL + 'logon.i4?LoginWebserviceId=%s&disableheader=true', [aSessionId]);
+ Result := Format(BaseURL + 'logon.i4?LoginWebserviceId=%s&disableheader=true&disablesidenav=true&hidelogoff=true', [aSessionId]);
 end;
 
 initialization
