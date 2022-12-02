@@ -39,7 +39,7 @@ type
 
 implementation
 
-uses System.SysUtils;
+uses System.SysUtils, System.IniFiles, System.IOUtils;
 
 //global (private) instance
 var
@@ -84,12 +84,18 @@ initialization
   // Default Test Values for Yellowfin Demo Install.
   // Recommendation is to install Yellowfin on a different machine in production.
 //  YFDefaults.BaseURL := 'http://localhost:8080';
-  YFDefaults.BaseURL := 'http://192.168.1.2:9999';
-  YFDefaults.loginpassword := 'test';
-  YFDefaults.loginId := 'admin@yellowfin.com.au';
-  YFDefaults.orgId := 1;
-  YFDefaults.person_userId := 'admin@yellowfin.com.au';
-  YFDefaults.person_password := 'test';
+  var aPath :=             TPath.Combine(TPath.GetDirectoryName(ParamStr(0)), 'YFDefaults.ini');
+  var INI := TInifile.Create(aPath);
+  try
+    YFDefaults.BaseURL       := INI.ReadString('Defaults','BaseURL','http://localhost:8080');
+    YFDefaults.loginpassword := INI.ReadString('Defaults','loginPassword', 'test');
+    YFDefaults.loginId       := INI.ReadString('Defaults','loginId', 'admin@yellowfin.com.au');
+    YFDefaults.orgId         := INI.ReadInteger('Defaults','orgId',1);
+    YFDefaults.person_userId := INI.ReadString('Defaults','person_userId', 'admin@yellowfin.com.au');
+    YFDefaults.person_password := INI.ReadString('Defaults','person_password','test');
+  finally
+    INI.Free;
+  end;
 
 finalization
   if Assigned(FYFDefaults) then
