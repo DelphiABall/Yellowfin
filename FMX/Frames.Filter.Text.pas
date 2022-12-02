@@ -23,6 +23,7 @@ type
   public
     { Public declarations }
     function GetReportFilter: reportFilter; override;
+    function FilterString: string; override;
   end;
 
 var
@@ -38,6 +39,11 @@ procedure TFrameFilterText.edtValueChange(Sender: TObject);
 begin
   inherited;
   swEnabled.IsChecked := True;
+end;
+
+function TFrameFilterText.FilterString: string;
+begin
+  Result := edtValue.Text;
 end;
 
 function TFrameFilterText.GetReportFilter: reportFilter;

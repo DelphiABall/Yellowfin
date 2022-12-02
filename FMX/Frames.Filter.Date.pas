@@ -23,6 +23,7 @@ type
   public
     { Public declarations }
     function GetReportFilter: reportFilter; override;
+    function FilterString: string; override;
   end;
 
 implementation
@@ -35,6 +36,12 @@ procedure TFrameFilterDate.DateEditChange(Sender: TObject);
 begin
   inherited;
   swEnabled.IsChecked := True;
+end;
+
+function TFrameFilterDate.FilterString: string;
+begin
+  // TODO Need to check format
+  Result := FormatDateTime('yyyy-mm-dd',DateEdit.Date);
 end;
 
 function TFrameFilterDate.GetReportFilter: reportFilter;

@@ -29,6 +29,7 @@ type
   public
     { Public declarations }
     function GetReportFilter: reportFilter; override;
+    function FilterString: string; override;
   end;
 
 implementation
@@ -36,6 +37,11 @@ implementation
 {$R *.fmx}
 
 { TFrameFilterNumber }
+
+function TFrameFilterNumber.FilterString: string;
+begin
+  REsult := sbValue.Value.ToString;
+end;
 
 function TFrameFilterNumber.GetReportFilter: reportFilter;
 begin

@@ -43,6 +43,7 @@ type
     LinkPropertyToFieldText: TLinkPropertyToField;
   private
     function GetFilterEnabled: Boolean;
+    function GetFilterID: Integer;
     { Private declarations }
   protected
     procedure LoadFilterDefaults; virtual; abstract;
@@ -50,7 +51,9 @@ type
     { Public declarations }
     constructor Create(aOwner : TComponent; aFilterID : Integer); reintroduce;
     function GetReportFilter: reportFilter; virtual;
+    function FilterString: string; virtual;
     property FilterEnabled : Boolean Read GetFilterEnabled;
+    property FilterID : Integer read GetFilterID;
   end;
 
 implementation
@@ -64,19 +67,25 @@ constructor TFrameFilterBase.Create(aOwner: TComponent; aFilterID: Integer);
 begin
   inherited Create(AOwner);
 
+  // Find the one record
+  mtReportSchema.Close;
+  mtReportSchema.CloneCursor(YF_ReportData.mtReportSchema,True, False);
+  mtReportSchema.Filter := 'FILTERID='+aFilterID.ToString;
+  mtReportSchema.Filtered := True;
+
   // Uses LiveBindings to then set the screen values.
   mtFilterValues.Close;
   mtFilterValues.CloneCursor(YF_ReportData.mtFilterValues,True, False);
   mtFilterValues.Filter := 'FILTERID='+aFilterID.ToString;
   mtFilterValues.Filtered := True;
 
-  mtReportSchema.Close;
-  mtReportSchema.CloneCursor(YF_ReportData.mtReportSchema,True, False);
-  mtReportSchema.Filter := 'FILTERID='+aFilterID.ToString;
-  mtReportSchema.Filtered := True;
-
   lblTitle.Text := mtReportSchemadisplayName.AsString;
   LoadFilterDefaults;
+end;
+
+function TFrameFilterBase.FilterString: string;
+begin
+  Result := '';
 end;
 
 function TFrameFilterBase.GetFilterEnabled: Boolean;
@@ -84,10 +93,15 @@ begin
   Result := swEnabled.IsChecked;
 end;
 
+function TFrameFilterBase.GetFilterID: Integer;
+begin
+  Result := mtReportSchemaFilterID.AsInteger;
+end;
+
 function TFrameFilterBase.GetReportFilter: reportFilter;
 begin
   Result := ReportFilter.Create;
-  Result.FilterID := mtReportSchemaFilterID.AsInteger;
+  Result.FilterID := FilterID;
   Result.isOmitted := False;
 end;
 

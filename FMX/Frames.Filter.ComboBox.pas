@@ -26,6 +26,7 @@ type
   public
     { Public declarations }
     function GetReportFilter: reportFilter; override;
+    function FilterString: string; override;
   end;
 
 implementation
@@ -38,6 +39,12 @@ procedure TFrameFilterComboBox.cbValuesChange(Sender: TObject);
 begin
   inherited;
   swEnabled.IsChecked := True;
+end;
+
+function TFrameFilterComboBox.FilterString: string;
+begin
+  if cbValues.Selected <> nil then
+    Result := cbValues.Selected.Text;
 end;
 
 function TFrameFilterComboBox.GetReportFilter: reportFilter;

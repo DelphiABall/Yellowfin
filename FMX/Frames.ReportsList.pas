@@ -55,6 +55,8 @@ type
     mvFilter: TMultiView;
     vsbFilter: TVertScrollBox;
     loMain: TLayout;
+    cbReportType: TComboBox;
+    loStaticOptions: TLayout;
     procedure btnRefreshClick(Sender: TObject);
     procedure lvReportsPullRefresh(Sender: TObject);
     procedure actRunReportUpdate(Sender: TObject);
@@ -63,6 +65,7 @@ type
       const AItem: TListViewItem);
     procedure cbListTypeChange(Sender: TObject);
     procedure imgFavClick(Sender: TObject);
+    procedure cbReportTypeChange(Sender: TObject);
   private
     { Private declarations }
     FActiveFilter : TObjectList<TFrameFilterBase>;
@@ -92,102 +95,129 @@ procedure TFrameReportList.actRunReportExecute(Sender: TObject);
 var
   LoadWebView    : Boolean;
   LoadSourceView : Boolean;
-begin
-  // This is the Interfaced Object to call the WebService.
-  var WS := GetLegacyReportService(False,YFDefaults.GetServiceURL(TYFDefaults.TYFService.Reports));
 
-  var FReportType := '';
-  if rbPDF.IsChecked then begin
-    FReportType := YRR_PDF;
-    LoadWebView    := True;
-    LoadSourceView := False;
-  end else if rbText.IsChecked then begin
-    FReportType := YRR_CSV;
-    LoadWebView    := False;
-    LoadSourceView := True;
-  end else if rbXLS.IsChecked then begin
-    FReportType := YRR_XLS;
-    LoadWebView    := True;
-    LoadSourceView := False;
-  end
-  else begin
-    FReportType := YRR_HTML;
-    LoadWebView    := True;
-    LoadSourceView := True;
+  procedure InitiateBrowser;
+  begin
+    if FWebBrowser1 = nil then begin
+      FWebBrowser1 := TWebBrowser.Create(tabBrowser);
+      FWebBrowser1.Parent := tabBrowser;
+      FWebBrowser1.Align := TAlignLayout.Client;
+      FWebBrowser1.Visible := True;
+      FWebBrowser1.WindowsEngine := TWindowsEngine.EdgeIfAvailable;
+    end;
   end;
 
-  var Req := ReportServiceRequest.CreateWithDefaults(YFDefaults,FReportType);
-  Req.ReportID := YF_ReportData.mtReportsreportID.AsInteger;
-//  Req.showDrillThroughStack := True;
-//  Req.showDrillDownStack := True;
-//  Req.activeCharts := True;
+begin
+  // Static
+  if cbReportType.ItemIndex = 0 then begin
+    {$REGION 'Static WebService Based Call'}
+    // This is the Interfaced Object to call the WebService.
+    var WS := GetLegacyReportService(False,YFDefaults.GetServiceURL(TYFDefaults.TYFService.Reports));
 
-  if FActiveFilter.Count > 0 then begin
-    var ReportFilters : Array_Of_ReportFilter := [];
+    var FReportType := '';
+    if rbPDF.IsChecked then begin
+      FReportType := YRR_PDF;
+      LoadWebView    := True;
+      LoadSourceView := False;
+    end else if rbText.IsChecked then begin
+      FReportType := YRR_CSV;
+      LoadWebView    := False;
+      LoadSourceView := True;
+    end else if rbXLS.IsChecked then begin
+      FReportType := YRR_XLS;
+      LoadWebView    := True;
+      LoadSourceView := False;
+    end
+    else begin
+      FReportType := YRR_HTML;
+      LoadWebView    := True;
+      LoadSourceView := True;
+    end;
 
+    var Req := ReportServiceRequest.CreateWithDefaults(YFDefaults,FReportType);
+    Req.ReportID := YF_ReportData.mtReportsreportID.AsInteger;
+
+    if FActiveFilter.Count > 0 then begin
+      var ReportFilters : Array_Of_ReportFilter := [];
+
+      for var CurrFilter in FActiveFilter do begin
+        if CurrFilter.FilterEnabled then begin
+          SetLength(ReportFilters, Length(ReportFilters)+1);
+          ReportFilters[Length(ReportFilters)-1] := CurrFilter.GetReportFilter;
+        end;
+      end;
+      Req.filters := ReportFilters;
+    end;
+
+    var Result := WS.remoteReportCall(Req);
+    try
+      if SameStr(Result.statusCode,YRS_SUCCESS) then begin
+
+        lblReportTitle.Text := Result.reportName;
+        lblReportDescription.Text := Result.reportDescription;
+
+        var FS := TMemoryStream.Create;
+        try
+          var FBytes := TNetEncoding.Base64.DecodeStringToBytes(Result.binaryData);
+          FS.WriteBuffer(FBytes, Length(FBytes));
+          FS.Seek(0,0);
+
+          // TPath.Combine(TPath.GetDirectoryName(ParamStr(0)),'report_temp.'+FReportType);
+
+          var FN := TPath.Combine(TPath.GetCachePath,'report_temp.'+FReportType);
+          FS.SaveToFile(FN);
+          lblFilePath.Text := FN;
+
+          if not tcReportList.Visible then
+            tcReportList.Visible := True;
+
+          if LoadSourceView then
+            memoSource.Lines.LoadFromFile(FN);
+          if LoadWebView then begin
+            InitiateBrowser;
+            FWebBrowser1.Width := tabBrowser.Width - (tabBrowser.Margins.Left + tabBrowser.Margins.Right);
+
+            FWebBrowser1.Navigate('file://'+FN);
+          end;
+
+          tabBrowser.Visible := LoadWebView;
+          tabSource.Visible := LoadSourceView;
+
+          if (tcOutput.ActiveTab = nil) or (tcOutput.ActiveTab.Visible = False) then begin
+            if tabBrowser.Visible then
+              tcOutput.ActiveTab := tabBrowser
+            else
+            if tabSource.Visible then
+              tcOutput.ActiveTab := tabSource;
+          end;
+
+        finally
+          FS.Free;
+        end;
+      end;
+    finally
+      Result.Free;
+    end;
+  {$ENDREGION}
+  end
+  else
+  begin
+   {$REGION 'Interactive URL'}
+   // Get the base URL for the session
+   // Add in the paramaters if selected for the report
+   InitiateBrowser;
+   var aURL := TYFUserMethods.GenerateYellowfinSingleSignOnURL('VIEWREPORT')+Format('&REPORTID=%d',[YF_ReportData.mtReportsreportID.AsInteger]);
+
+   // Add in filters (optional)
     for var CurrFilter in FActiveFilter do begin
       if CurrFilter.FilterEnabled then begin
-        SetLength(ReportFilters, Length(ReportFilters)+1);
-        ReportFilters[Length(ReportFilters)-1] := CurrFilter.GetReportFilter;
+        var FilterValues := CurrFilter.FilterString;
+        aURL := aURL+ Format('&FILTER%d=%s',[CurrFilter.FilterID,FilterValues]);
       end;
     end;
-    Req.filters := ReportFilters;
-  end;
 
-  var Result := WS.remoteReportCall(Req);
-  try
-    if SameStr(Result.statusCode,YRS_SUCCESS) then begin
-
-      lblReportTitle.Text := Result.reportName;
-      lblReportDescription.Text := Result.reportDescription;
-
-      var FS := TMemoryStream.Create;
-      try
-        var FBytes := TNetEncoding.Base64.DecodeStringToBytes(Result.binaryData);
-        FS.WriteBuffer(FBytes, Length(FBytes));
-        FS.Seek(0,0);
-
-        // TPath.Combine(TPath.GetDirectoryName(ParamStr(0)),'report_temp.'+FReportType);
-
-        var FN := TPath.Combine(TPath.GetCachePath,'report_temp.'+FReportType);
-        FS.SaveToFile(FN);
-        lblFilePath.Text := FN;
-
-        if not tcReportList.Visible then
-          tcReportList.Visible := True;
-
-        if LoadSourceView then
-          memoSource.Lines.LoadFromFile(FN);
-        if LoadWebView then begin
-          if FWebBrowser1 = nil then begin
-            FWebBrowser1 := TWebBrowser.Create(tabBrowser);
-            FWebBrowser1.Parent := tabBrowser;
-            FWebBrowser1.Align := TAlignLayout.Client;
-            FWebBrowser1.Visible := True;
-            FWebBrowser1.WindowsEngine := TWindowsEngine.EdgeIfAvailable;
-          end;
-          FWebBrowser1.Width := tabBrowser.Width - (tabBrowser.Margins.Left + tabBrowser.Margins.Right);
-
-          FWebBrowser1.Navigate('file://'+FN);
-        end;
-
-        tabBrowser.Visible := LoadWebView;
-        tabSource.Visible := LoadSourceView;
-
-        if (tcOutput.ActiveTab = nil) or (tcOutput.ActiveTab.Visible = False) then begin
-          if tabBrowser.Visible then
-            tcOutput.ActiveTab := tabBrowser
-          else
-          if tabSource.Visible then
-            tcOutput.ActiveTab := tabSource;
-        end;
-
-      finally
-        FS.Free;
-      end;
-    end;
-  finally
-    Result.Free;
+   FWebBrowser1.Navigate(aURL);
+   {$ENDREGION}
   end;
 end;
 
@@ -195,6 +225,7 @@ procedure TFrameReportList.actRunReportUpdate(Sender: TObject);
 begin
   actRunReport.Enabled := YF_ReportData.mtReports.Active and
                           (YF_ReportData.mtReportsreportID.AsInteger > 0);
+  loStaticOptions.Visible := cbReportType.ItemIndex = 0;
 end;
 
 procedure TFrameReportList.btnRefreshClick(Sender: TObject);
@@ -214,6 +245,11 @@ begin
     //Drafts
     3 : YF_ReportData.Reload(YRC_GETUSERDRAFTREPORTS);
   end;
+end;
+
+procedure TFrameReportList.cbReportTypeChange(Sender: TObject);
+begin
+  actRunReport.Execute;
 end;
 
 constructor TFrameReportList.Create(AOwner: TComponent);
