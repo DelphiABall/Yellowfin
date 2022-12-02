@@ -20,6 +20,7 @@ type
   public
     // Base URL for YellowFin and the way to get the Servie URL
     function GetServiceURL(aService : TYFService):string;
+    function SigleSignOnBaseURL(aSessionId: string): string;
     property BaseURL         : string read FBaseURL write SetBaseURL;
 
     // Admin
@@ -74,10 +75,16 @@ begin
     FBaseURL := Value;
 end;
 
+function TYFDefaults.SigleSignOnBaseURL(aSessionId: string): string;
+begin
+ Result := Format(BaseURL + 'logon.i4?LoginWebserviceId=%s&disableheader=true', [aSessionId]);
+end;
+
 initialization
   // Default Test Values for Yellowfin Demo Install.
   // Recommendation is to install Yellowfin on a different machine in production.
-  YFDefaults.BaseURL := 'http://localhost:8080';
+//  YFDefaults.BaseURL := 'http://localhost:8080';
+  YFDefaults.BaseURL := 'http://192.168.1.2:9999';
   YFDefaults.loginpassword := 'test';
   YFDefaults.loginId := 'admin@yellowfin.com.au';
   YFDefaults.orgId := 1;

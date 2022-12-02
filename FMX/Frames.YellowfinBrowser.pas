@@ -5,7 +5,8 @@ interface
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants, 
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
-  FMX.Controls.Presentation, FMX.WebBrowser, System.Actions, FMX.ActnList;
+  FMX.Controls.Presentation, FMX.WebBrowser, System.Actions, FMX.ActnList,
+  FMX.ListBox;
 
 type
   TFrameYellowfinBrowser = class(TFrame)
@@ -15,11 +16,14 @@ type
     btnRefresh: TButton;
     ActionList1: TActionList;
     actHome: TAction;
+    cbEntryPoint: TComboBox;
+    LblEntryPoint: TLabel;
     procedure actHomeExecute(Sender: TObject);
   private
     { Private declarations }
   public
     { Public declarations }
+    constructor Create(AOwner : TComponent); reintroduce;
   end;
 
 implementation
@@ -29,8 +33,15 @@ uses YF.SOAP.UserMethods, YF.SOAP.Defaults;
 
 procedure TFrameYellowfinBrowser.actHomeExecute(Sender: TObject);
 begin
-  var URL := Format(YFDefaults.BaseURL + '/logon.i4?LoginWebserviceId=%s&disableheader=true&entry=TIMELINE', [TYFUserMethods.FetchSessionID(YFDefaults.loginId, YFDefaults.Loginpassword)]);
+  var URL := TYFUserMethods.GenerateYellowfinSingleSignOnURL(cbEntryPoint.Selected.Text);
   WebBrowser.Navigate(URL);
+end;
+
+constructor TFrameyellowfinBrowser.Create(AOwner : TComponent);
+begin
+  inherited;
+  cbEntryPoint.ItemIndex := 0;
+  actHome.Execute;
 end;
 
 end.

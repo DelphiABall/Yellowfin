@@ -11,6 +11,7 @@ type
 
     class function TestDefaultCredentials : Boolean;
     class function FetchSessionID(aUserID, aPassword: string): string; static;
+    class function GenerateYellowfinSingleSignOnURL(aEntryPoint: string): string; static;
   end;
 
 implementation
@@ -36,6 +37,12 @@ begin
   finally
     SoapResult.Free;
   end;
+end;
+
+class function TYFUserMethods.GenerateYellowfinSingleSignOnURL(aEntryPoint: string): string;
+begin
+  var url := YFDefaults.SigleSignOnBaseURL(TYFUserMethods.FetchSessionID(YFDefaults.loginId, YFDefaults.Loginpassword));
+  Result := url + Format('&entry=%s', [aEntryPoint]);
 end;
 
 class function TYFUserMethods.TestDefaultCredentials: Boolean;
