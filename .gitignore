@@ -72,3 +72,7 @@ EBWebView/
 # Boss dependency manager vendor folder https://github.com/HashLoad/boss
 modules/
 
+FMX/Win64
+FMX/Win32
+VCL/Win64
+VCL/Win32
